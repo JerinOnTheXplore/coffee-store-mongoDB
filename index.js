@@ -24,6 +24,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     const coffeesDatabase=client.db('coffeeDB').collection('coffees');
+    const usersCollection=client.db('coffeeDB').collection('users');
 
     app.get('/coffees',async(req,res)=>{
       const cursor =coffeesDatabase.find();
@@ -63,6 +64,15 @@ async function run() {
       const result =await coffeesDatabase.deleteOne(query);
       res.send(result);
     })
+
+  // User related APIs
+    app.post('/users', async(req,res)=>{
+      const userProfile =req.body;
+      console.log(userProfile);
+      const result = await usersCollection.insertOne(userProfile);
+      res.send(result);
+    })
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
